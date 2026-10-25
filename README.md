@@ -1,2 +1,44 @@
 # getajob
-An AI assistant that helps organize job application schedules (✯◡✯)
+
+채용 공고 내용을 붙여넣어 지원 서랍과 캘린더에 정리하는 웹 앱.
+
+## 사용
+
+`index.html`을 브라우저에서 연다. 설치·계정·API 키가 필요 없다.
+
+1. 공고 내용을 붙여넣고 **내용 정리하기**.
+2. 회사·직무·일정 이름·날짜를 확인하거나 수정.
+3. 체크한 날짜만 캘린더에 추가하고, 공고는 **고민중**에 저장.
+
+현재 내용 정리는 브라우저의 규칙 기반 추출이며 외부 AI를 호출하지 않는다. `회사명:`, `직무:`, `접수기간:`, `면접:`처럼 항목이 구분된 공고를 잘 읽는다. 추출하지 못한 항목은 직접 입력 가능하다. 날짜 범위는 마지막 날짜를 사용하고, 연도가 없거나 잘못된 날짜·추후 안내는 자동으로 날짜를 채우지 않는다. 복잡한 공고는 저장 전에 원문과 결과를 반드시 확인한다. 원문은 공고 카드에서 다시 볼 수 있다.
+
+지원 단계 드래그, 불합격 기록 보관·복원, 수동 일정 추가, 자유 형광펜·부분 지우개·한 획 취소를 제공한다. 모든 기록은 해당 브라우저의 localStorage에 저장된다. 브라우저 데이터 삭제 시 기록도 지워지며, 파일 모드와 서버 주소의 기록은 서로 별개다. 공고 내용은 서버로 전송하지 않는다. 글꼴은 온라인에서 Google Fonts를 사용하고 오프라인에서는 시스템 글꼴로 표시한다.
+
+선택적으로 Python 3 서버 사용:
+
+```sh
+cd /workspace/getajob
+python3 server.py
+```
+
+기본 포트 4174, `PORT`와 `HOST`로 변경 가능. 서버는 정적 화면만 제공한다.
+
+## 검증
+
+Playwright 및 Chromium이 있는 환경에서:
+
+```sh
+node tests/paste.cjs
+```
+
+추출·기간 날짜·연도 미상·잘못된 날짜·확인 저장·고민중 보관·캘린더·새로고침 유지·수동 일정·지우개·모바일 레이아웃을 검증한다.
+
+최종 합격 이동 시 서랍 내부 축하 효과, 불합격 이동 시 눈물 애니메이션. 효과 검증: `node tests/effects.cjs`.
+
+## GitHub Pages 배포
+
+저장소 Settings → Pages → Build and deployment → Source를 **GitHub Actions**로 선택한다.
+main 브랜치 푸시 시 `.github/workflows/pages.yml`이 `index.html`만 배포한다.
+Actions의 **Deploy website to GitHub Pages** 실행 결과에서 배포 상태를 확인한다.
+아직 Pages를 설정하지 않은 경우 위 설정 후 Actions에서 **Run workflow**를 실행한다.
+소스 코드와 문서·테스트는 공개 웹 아티팩트에 포함하지 않는다.
