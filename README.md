@@ -42,3 +42,5 @@ main 브랜치 푸시 시 `.github/workflows/pages.yml`이 `index.html`만 배�
 Actions의 **Deploy website to GitHub Pages** 실행 결과에서 배포 상태를 확인한다.
 아직 Pages를 설정하지 않은 경우 위 설정 후 Actions에서 **Run workflow**를 실행한다.
 소스 코드와 문서·테스트는 공개 웹 아티팩트에 포함하지 않는다.
+
+오른쪽 아래 고양이 집사는 마감일 기준 준비 일정을 제안한다. 확인한 일정만 추가하며 중복을 방지한다. 현재 규칙 기반 자동 제안이고 AI 모델은 미연결이다. 검증: `node tests/butler.cjs`.
