@@ -8,11 +8,11 @@ ROOT = Path(__file__).resolve().parent
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         route = self.path.split('?')[0]
-        if route not in ('/', '/index.html', '/assets/rabbit-butler.png'):
+        if route not in ('/', '/index.html', '/assets/rabbit-butler-game.png'):
             self.send_error(404)
             return
-        is_image = route == '/assets/rabbit-butler.png'
-        data = (ROOT / ('assets/rabbit-butler.png' if is_image else 'index.html')).read_bytes()
+        is_image = route == '/assets/rabbit-butler-game.png'
+        data = (ROOT / ('assets/rabbit-butler-game.png' if is_image else 'index.html')).read_bytes()
         self.send_response(200)
         self.send_header('Content-Type', 'image/png' if is_image else 'text/html; charset=utf-8')
         self.send_header('Content-Length', str(len(data)))
