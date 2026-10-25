@@ -7,12 +7,14 @@ ROOT = Path(__file__).resolve().parent
 
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
-        if self.path.split('?')[0] not in ('/', '/index.html'):
+        route = self.path.split('?')[0]
+        if route not in ('/', '/index.html', '/assets/rabbit-butler.png'):
             self.send_error(404)
             return
-        data = (ROOT / 'index.html').read_bytes()
+        is_image = route == '/assets/rabbit-butler.png'
+        data = (ROOT / ('assets/rabbit-butler.png' if is_image else 'index.html')).read_bytes()
         self.send_response(200)
-        self.send_header('Content-Type', 'text/html; charset=utf-8')
+        self.send_header('Content-Type', 'image/png' if is_image else 'text/html; charset=utf-8')
         self.send_header('Content-Length', str(len(data)))
         self.end_headers()
         self.wfile.write(data)

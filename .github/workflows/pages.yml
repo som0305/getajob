@@ -24,6 +24,7 @@ jobs:
         run: |
           mkdir -p public
           cp index.html public/index.html
+          cp -R assets public/assets
           touch public/.nojekyll
       - uses: actions/upload-pages-artifact@v3
         with:

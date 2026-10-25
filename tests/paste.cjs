@@ -7,7 +7,7 @@ const fs = require('node:fs');
  const page = await browser.newPage({viewport:{width:1440,height:1000}});
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
  // Loading the exact HTML without a server proves extraction requires no API.
- await page.route('https://getajob.test/**', route=>route.fulfill({contentType:'text/html',body:fs.readFileSync(require('node:path').join(__dirname,'../index.html'),'utf8')}));
+ await page.route('https://getajob.test/**', route=>route.fulfill(route.request().url().endsWith('assets/rabbit-butler.png')?{contentType:'image/png',body:fs.readFileSync(require('node:path').join(__dirname,'../assets/rabbit-butler.png'))}:{contentType:'text/html',body:fs.readFileSync(require('node:path').join(__dirname,'../index.html'),'utf8')}));
  await page.goto('https://getajob.test/');
  await page.click('#organizePosting');assert((await page.locator('#pasteError').textContent()).includes('붙여넣어'));
  await page.evaluate(()=>{document.querySelector('#jobEditor').showModal=undefined});
@@ -26,7 +26,7 @@ const fs = require('node:fs');
  await page.setViewportSize({width:390,height:844});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));assert.deepEqual(errors,[]);
  // Regression: HTTP lacks crypto.randomUUID. Save must still work, with visible validation.
  const httpPage=await browser.newPage();httpPage.on('pageerror',e=>errors.push(e.message));
- await httpPage.route('http://getajob.test/**',route=>route.fulfill({contentType:'text/html',body:fs.readFileSync(require('node:path').join(__dirname,'../index.html'),'utf8')}));
+ await httpPage.route('http://getajob.test/**',route=>route.fulfill(route.request().url().endsWith('assets/rabbit-butler.png')?{contentType:'image/png',body:fs.readFileSync(require('node:path').join(__dirname,'../assets/rabbit-butler.png'))}:{contentType:'text/html',body:fs.readFileSync(require('node:path').join(__dirname,'../index.html'),'utf8')}));
  await httpPage.goto('http://getajob.test');assert.equal(await httpPage.evaluate(()=>typeof crypto.randomUUID),'undefined');
  await httpPage.fill('#postingText','서류 마감: 2026.11.20');await httpPage.click('#organizePosting');await httpPage.click('#savePosting');assert((await httpPage.locator('#reviewError').textContent()).includes('회사명'));assert.equal(await httpPage.locator('#company').getAttribute('aria-invalid'),'true');
  await httpPage.fill('#company','HTTP 회사');await httpPage.click('#savePosting');assert((await httpPage.locator('#reviewError').textContent()).includes('직무'));await httpPage.fill('#jobTitle','기획');
